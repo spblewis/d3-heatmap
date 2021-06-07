@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/spblewis/d3-heatmap/issues"
   },
-  "homepage": "https://github.com/spblewis/d3-heatmap#readme"
+  "homepage": "https://github.com/spblewis/d3-heatmap#readme",
+  "devDependencies": {
+    "eslint": "^7.28.0"
+  }
 }
