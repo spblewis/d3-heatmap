@@ -1,0 +1,19 @@
+{
+  "name": "d3-heatmap",
+  "version": "1.0.0",
+  "description": "A heatmap written with d3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spblewis/d3-heatmap.git"
+  },
+  "author": "Schuyler Lewis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spblewis/d3-heatmap/issues"
+  },
+  "homepage": "https://github.com/spblewis/d3-heatmap#readme"
+}
