@@ -21,11 +21,11 @@
     "eslint": "^7.30.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.23.4",
+    "webpack": "^5.44.0",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "d3": "^7.0.0",
-    "webpack": "^5.42.1"
+    "d3": "^7.0.0"
   }
 }
