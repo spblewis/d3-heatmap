@@ -2,21 +2,45 @@ import * as d3 from 'd3';
 
 const source = 'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json';
 
+const height = 500;
+const width = 800;
+const padding = 30;
+
 const svg = d3.select('main')
   .append('svg')
-  .attr('height', '500px')
-  .attr('width', '800px');
+  .attr('height', height)
+  .attr('width', width);
 
 d3.json(source).then((data) => {
   const dataset = data.monthlyVariance;
+  console.log(data);
 
   // x axis
-  const xAxis = svg.append('g')
-    .attr('id', 'x-axis');
+  const xScale = d3.scaleLinear();
+  xScale.domain(
+    [d3.min(dataset, (d) => d.year),
+     d3.max(dataset, (d) => d.year)]
+    )
+    .range([padding, width - padding]);
+
+  const xAxis = d3.axisBottom(xScale);
+  
+  svg.append('g')
+    .attr('transform', `translate(0, ${height - padding})`)
+    .attr('id', 'x-axis')
+    .call(xAxis);
 
   //y axis
-  const yAxis = svg.append('g')
-    .attr('id', 'y-axis');
+  const yScale = d3.scaleLinear();
+  yScale.domain([0, 12])
+    .range([height - padding, padding]);
+
+  const yAxis = d3.axisLeft(yScale);
+  
+  svg.append('g')
+    .attr('transform', `translate(${padding}, 0)`)
+    .attr('id', 'y-axis')
+    .call(yAxis);
 
   const cells = svg.selectAll('rect')
     .data(dataset)
