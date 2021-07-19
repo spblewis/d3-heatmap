@@ -5,6 +5,19 @@ const source = 'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceD
 const height = 500;
 const width = 1200;
 const padding = 30;
+const colors = [
+  "#313695",
+  "#4575b4",
+  "#74add1",
+  "#abd9e9",
+  "#e0f3f8",
+  "#ffffbf",
+  "#fee090",
+  "#fdae61",
+  "#f46d43",
+  "#d73027",
+  "#a50026"
+];
 
 const svg = d3.select('main')
   .append('svg')
@@ -43,16 +56,14 @@ d3.json(source).then((data) => {
     .call(yAxis);
 
   // color gradient
-
   const colorScale = d3.scaleQuantize()
   colorScale.domain([
     d3.min(dataset, (d) => d.variance),
     d3.max(dataset, (d) => d.variance)
   ])
-    .range(['blue', 'light-blue', 'yellow', 'pink', 'red', 'brown']);
+    .range(colors);
 
   // cell data
-
   const cells = svg.selectAll('rect')
     .data(dataset)
     .enter()
@@ -68,5 +79,3 @@ d3.json(source).then((data) => {
     .attr('fill', (d) => colorScale(d.variance));
 
 });
-
-  svg.select('');
