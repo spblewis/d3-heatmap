@@ -1,0 +1,7 @@
+body {
+    background-color: aquamarine;
+}
+
+rect:hover {
+    border: 1px solid black;
+}
