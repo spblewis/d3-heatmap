@@ -1,7 +1,26 @@
-body {
-    background-color: aquamarine;
+* {
+    margin: 0;
+    padding: 0;
 }
 
-rect:hover {
-    border: 1px solid black;
+body {
+    background-color: aquamarine;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+main {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.cell:hover {
+    stroke: black;
+    stroke-width: 2;
 }
