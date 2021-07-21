@@ -45,12 +45,12 @@ const svg = d3.select('main')
   .attr('height', height)
   .attr('width', width);
 
-const tooltip = d3.select('main')
+// Define an (invisible) tooltip to manipulate later
+const tooltip = d3.select('body')
   .append('div')
   .style('height', 200)
   .style('width', 200)
-  .style('background-color', 'gray')
-  .style('display', 'none');
+  .style('background-color', 'gray');
 
 // Get the data
 d3.json(source).then((data) => {
@@ -73,7 +73,7 @@ d3.json(source).then((data) => {
   // y axis
   const yScale = d3.scaleBand();
   yScale.domain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
-    .range([height - padding, padding]);
+    .range([padding, height - padding]);
 
   const yAxis = d3.axisLeft(yScale)
     .tickFormat(getTheMonth);
@@ -92,21 +92,30 @@ d3.json(source).then((data) => {
     .range(colors);
 
   // cell data
-  const cells = svg.selectAll('rect')
+  svg.selectAll('rect')
     .data(dataset)
     .enter()
     .append('rect')
     .attr('class', 'cell')
     .attr('data-month', (d) => d.month - 1)
     .attr('data-year', (d) => d.year)
-    .attr('data-temp', (d) => d.variance)
+    .attr('data-temp', (d) => data.baseTemperature + d.variance)
     .attr('height', yScale.bandwidth)
     .attr('width', xScale.bandwidth)
     .attr('x', (d) => xScale(d.year))
     .attr('y', (d) => yScale(d.month - 1))
-    .attr('fill', (d) => colorScale(d.variance));
-
-  // tooltip
+    .attr('fill', (d) => colorScale(d.variance))
+    .on('mouseover', (d) => {
+      tooltip.style('display', 'block')
+        .style('left', `${d3.event.pageX + 10}px`)
+        .style('top', `${d3.event.pageY + 50}px`)
+        .html(`
+        <p>${getTheMonth(d.month - 1)}, ${d.year}</p>
+        <p>${data.baseTemperature + d.variance}</p>`
+      );
+    }).on('mouseout', () => {
+      tooltip.style('display', 'none');
+  });
   
 
 });
