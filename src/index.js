@@ -58,14 +58,12 @@ d3.json(source).then((data) => {
   console.log(data);
 
   // x axis
-  const xScale = d3.scaleLinear();
-  xScale.domain(
-    [d3.min(dataset, (d) => d.year),
-     d3.max(dataset, (d) => d.year)]
-    )
+  const xScale = d3.scaleBand();
+  xScale.domain(dataset.map((d) => d.year))
     .range([padding, width - padding]);
 
-  const xAxis = d3.axisBottom(xScale);
+  const xAxis = d3.axisBottom(xScale)
+    .tickValues(xScale.domain().filter((y) => y % 10 === 0));
   
   svg.append('g')
     .attr('transform', `translate(0, ${height - padding})`)
@@ -73,8 +71,8 @@ d3.json(source).then((data) => {
     .call(xAxis);
 
   // y axis
-  const yScale = d3.scaleLinear();
-  yScale.domain([0, 11])
+  const yScale = d3.scaleBand();
+  yScale.domain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
     .range([height - padding, padding]);
 
   const yAxis = d3.axisLeft(yScale)
@@ -102,10 +100,10 @@ d3.json(source).then((data) => {
     .attr('data-month', (d) => d.month - 1)
     .attr('data-year', (d) => d.year)
     .attr('data-temp', (d) => d.variance)
-    .attr('height', (height - padding) / 12 - 1)
-    .attr('width', 3)
+    .attr('height', yScale.bandwidth)
+    .attr('width', xScale.bandwidth)
     .attr('x', (d) => xScale(d.year))
-    .attr('y', (d) => yScale(d.month))
+    .attr('y', (d) => yScale(d.month - 1))
     .attr('fill', (d) => colorScale(d.variance));
 
   // tooltip
