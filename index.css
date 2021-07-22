@@ -3,16 +3,15 @@
     padding: 0;
 }
 
-body {
+main {
     background-color: aquamarine;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-
 }
 
-main {
+section {
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -23,4 +22,8 @@ main {
 .cell:hover {
     stroke: black;
     stroke-width: 2;
+}
+
+#tooltip {
+    position: absolute;
 }
