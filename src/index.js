@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-// Declare unchanging constants.
+// global constants.
 const source = 'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json';
 const height = 500;
 const width = 1200;
@@ -40,7 +40,8 @@ const getTheMonth = (n) => {
   return months[n];
 }
 
-const svg = d3.select('main')
+// Drawing area for the chart
+const svg = d3.select('section')
   .append('svg')
   .attr('height', height)
   .attr('width', width);
@@ -48,14 +49,16 @@ const svg = d3.select('main')
 // Define an (invisible) tooltip to manipulate later
 const tooltip = d3.select('body')
   .append('div')
-  .style('height', 200)
-  .style('width', 200)
-  .style('background-color', 'gray');
+  .attr('id', 'tooltip')
+  .style('height', '200px')
+  .style('width', '200px')
+  .style('background-color', 'gray')
+  .style('display', 'none')
+  .html('<p>tooltip here</p>');
 
 // Get the data
 d3.json(source).then((data) => {
   const dataset = data.monthlyVariance;
-  console.log(data);
 
   // x axis
   const xScale = d3.scaleBand();
@@ -91,7 +94,7 @@ d3.json(source).then((data) => {
   ])
     .range(colors);
 
-  // cell data
+  // Map the data
   svg.selectAll('rect')
     .data(dataset)
     .enter()
@@ -105,12 +108,14 @@ d3.json(source).then((data) => {
     .attr('x', (d) => xScale(d.year))
     .attr('y', (d) => yScale(d.month - 1))
     .attr('fill', (d) => colorScale(d.variance))
-    .on('mouseover', (d) => {
+    // Tooltip manipulation
+    .on('mouseover', (e, d) => {
+      const [x, y] = d3.pointer(e);
       tooltip.style('display', 'block')
-        .style('left', `${d3.event.pageX + 10}px`)
-        .style('top', `${d3.event.pageY + 50}px`)
-        .html(`
-        <p>${getTheMonth(d.month - 1)}, ${d.year}</p>
+        .style('left', `${x + 120}px`)
+        .style('top', `${y + 100}px`)
+        .attr('data-year', d.year)
+        .html(`<p>${getTheMonth(d.month - 1)}, ${d.year}</p>
         <p>${data.baseTemperature + d.variance}</p>`
       );
     }).on('mouseout', () => {
