@@ -94,6 +94,20 @@ d3.json(source).then((data) => {
   ])
     .range(colors);
 
+  // The Legend
+  /*const legend = d3.select('svg')
+    .append('g')
+    .attr('transform', `translate(${height - (padding/2)}, ${padding})`);
+
+  legend.selectAll('rect')
+    .data(colorScale.range)
+    .enter()
+    .append('rect')
+    .attr('width', 4)
+    .attr('height', 4)
+    .attr('fill', (d) => d);
+*/
+  
   // Map the data
   svg.selectAll('rect')
     .data(dataset)
