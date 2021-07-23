@@ -126,7 +126,6 @@ d3.json(source).then((data) => {
       if (d[1] === null) {
         d[1] = legendScale.domain()[1];
       }
-      console.log(d);
       return d;
     }))
     .enter()
@@ -159,12 +158,22 @@ d3.json(source).then((data) => {
     // Tooltip manipulation
     .on('mouseover', (e, d) => {
       const [x, y] = d3.pointer(e);
+      const winWidth = document.documentElement.clientWidth;
+      console.log(winWidth, x);
       tooltip.style('display', 'block')
-        .style('left', `${x + 120}px`)
+        .style('left', () => {
+          if (x < winWidth - 300) {
+            return `${x + 100}px`
+          } else {
+            return `${x - 140}px`
+          }
+        })
         .style('top', `${y + 100}px`)
+        .style('background-color', colorScale(d.variance))
         .attr('data-year', d.year)
         .html(`<p>${getTheMonth(d.month - 1)}, ${d.year}</p>
-        <p>${(data.baseTemperature + d.variance).toFixed(2)}</p>`
+        <p>${(data.baseTemperature + d.variance).toFixed(2)}&deg;C</p>
+        <p>${d.variance.toFixed(2)}&deg;C</p>`
       );
     }).on('mouseout', () => {
       tooltip.style('display', 'none');

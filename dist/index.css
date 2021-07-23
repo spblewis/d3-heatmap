@@ -31,7 +31,7 @@ section {
 #tooltip {
     position: absolute;
     border-radius: 5px;
-    border: 1px solid #fee090;
+    border: 1px solid black;
     width: 200px;
     background-color: #f2f6df;
     text-align: center;
