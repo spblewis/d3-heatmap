@@ -50,9 +50,6 @@ const svg = d3.select('section')
 const tooltip = d3.select('body')
   .append('div')
   .attr('id', 'tooltip')
-  .style('height', '200px')
-  .style('width', '200px')
-  .style('background-color', 'gray')
   .style('display', 'none')
   .html('<p>tooltip here</p>');
 
@@ -95,18 +92,55 @@ d3.json(source).then((data) => {
     .range(colors);
 
   // The Legend
-  /*const legend = d3.select('svg')
-    .append('g')
-    .attr('transform', `translate(${height - (padding/2)}, ${padding})`);
+  const legendHeight = 20;
+  const legendWidth = legendHeight * colors.length;
 
-  legend.selectAll('rect')
-    .data(colorScale.range)
+  const legend = svg
+    .append('g')
+    .attr('width', legendWidth)
+    .attr('height', legendHeight)
+    .attr('id', 'legend')
+    .attr('transform', `translate(${padding}, 0)`);
+
+
+
+  const legendScale = d3.scaleLinear()
+  legendScale.domain([
+      d3.min(colorScale.domain()),
+      d3.max(colorScale.domain())
+    ])
+    .range([0, legendWidth]);
+  
+    
+  const legendAxis = d3.axisBottom(legendScale)
+    .tickValues(colorScale.thresholds())
+    .tickFormat((n) => (n + data.baseTemperature).toFixed(1));
+
+  legend
+    .selectAll('rect')
+    .data(colorScale.range().map((color) => {
+      let d = colorScale.invertExtent(color);
+      if (d[0] === null) {
+        d[0] = legendScale.domain()[0];
+      }
+      if (d[1] === null) {
+        d[1] = legendScale.domain()[1];
+      }
+      console.log(d);
+      return d;
+    }))
     .enter()
     .append('rect')
-    .attr('width', 4)
-    .attr('height', 4)
-    .attr('fill', (d) => d);
-*/
+    .attr('width', legendHeight)
+    .attr('height', legendHeight)
+    .attr('x', (d) => legendScale(d[0]))
+    .attr('fill', (d) => colorScale(d[0]));
+
+  legend.append('g')
+    .attr('transform', `translate(0, ${legendHeight})`)
+    .attr('id', 'legend-axis')
+    .call(legendAxis);
+
   
   // Map the data
   svg.selectAll('rect')
@@ -130,7 +164,7 @@ d3.json(source).then((data) => {
         .style('top', `${y + 100}px`)
         .attr('data-year', d.year)
         .html(`<p>${getTheMonth(d.month - 1)}, ${d.year}</p>
-        <p>${data.baseTemperature + d.variance}</p>`
+        <p>${(data.baseTemperature + d.variance).toFixed(2)}</p>`
       );
     }).on('mouseout', () => {
       tooltip.style('display', 'none');
